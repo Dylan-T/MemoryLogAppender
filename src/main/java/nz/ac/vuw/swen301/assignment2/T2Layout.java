@@ -1,5 +1,4 @@
 package nz.ac.vuw.swen301.assignment2;
-
 /**
  * Variables that must be supported are:
  * c (category)
