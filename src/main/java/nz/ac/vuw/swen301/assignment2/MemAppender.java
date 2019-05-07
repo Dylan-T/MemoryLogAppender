@@ -2,6 +2,11 @@ package nz.ac.vuw.swen301.assignment2;
 
 import org.apache.log4j.*;
 import org.apache.log4j.spi.LoggingEvent;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,25 +20,36 @@ import java.util.List;
  * d. MemAppender has a property maxSize, if the number of logs reaches maxSize, the oldest logs are discarded.
  *    The number of discarded logs is counted, and this count can be accessed using the getDiscardedLogCount() method in MemAppender that returns this count as a long.
  */
-public class MemAppender extends AppenderSkeleton{
+public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
     private final long maxSize = 1000;
-    private int discardedLogs = 0;
-    private List<String> currentLogs;
+    private long discardedLogs = 0;
+    private List<String> currentLogs = new ArrayList<String>();
+    private Layout layout;
 
     /**
      * Construct a new MemAppender object
      */
-    public MemAppender(){
+    public MemAppender() {
+        //Adds this to the MBean server
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        try {
+            mbs.registerMBean(this, new ObjectName("nz.ac.vuw.swen301.assignment2:type=MemAppender:"));
+        } catch(Exception e){
 
+        }
     }
-
     /**
      *
      * @return list containing the current logs, must not be modifiable
      */
     public List<String> getCurrentLogs() {
-        return currentLogs;
+        ArrayList logCopy = new ArrayList(currentLogs); //Copy to make unmodifiable
+        return logCopy;
+    }
+
+    public long getLogCount() {
+        return currentLogs.size();
     }
 
     /**
@@ -45,14 +61,21 @@ public class MemAppender extends AppenderSkeleton{
     }
 
     protected void append(LoggingEvent loggingEvent) {
-
+        if (layout == null) return;
+        if(currentLogs.size() == maxSize){
+            currentLogs.remove(0);
+            discardedLogs++;
+        }
+        currentLogs.add(layout.format(loggingEvent));
     }
 
     public void close() {
-
+        currentLogs.clear();
+        discardedLogs = 0;
+        layout = null;
     }
 
     public boolean requiresLayout() {
-        return false;
+        return true;
     }
 }
