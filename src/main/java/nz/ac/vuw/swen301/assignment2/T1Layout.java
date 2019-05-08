@@ -1,6 +1,7 @@
 package nz.ac.vuw.swen301.assignment2;
 
 import org.apache.log4j.Layout;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
@@ -18,8 +19,7 @@ import org.apache.log4j.BasicConfigurator;
  * p (priority)
  */
 public class T1Layout extends Layout {
-
-    public static final String DEFAULT_PATTERN = "%c%d%m%p";
+    public static final String DEFAULT_PATTERN = "${m}";
     private String pattern;
     private Template temp;
 
@@ -42,7 +42,7 @@ public class T1Layout extends Layout {
 
         /* Get the template */
         try {
-            temp = new Template("pattern", new StringReader(pattern), cfg);
+            this.temp = new Template("pattern", new StringReader(this.pattern), cfg);
         } catch (Exception e){
 
         }

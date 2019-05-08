@@ -7,6 +7,8 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ import java.util.List;
  */
 public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
-    private final long maxSize = 1000;
+    private final long maxSize;
     private long discardedLogs = 0;
     private List<String> currentLogs = new ArrayList<String>();
     private Layout layout;
@@ -30,8 +32,10 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
     /**
      * Construct a new MemAppender object
      */
-    public MemAppender() {
+    public MemAppender(Layout layout, long maxSize) {
         //Adds this to the MBean server
+        this.layout = layout;
+        this.maxSize = maxSize;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         try {
             mbs.registerMBean(this, new ObjectName("nz.ac.vuw.swen301.assignment2:type=MemAppender:"));
@@ -45,7 +49,7 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      */
     public List<String> getCurrentLogs() {
         ArrayList logCopy = new ArrayList(currentLogs); //Copy to make unmodifiable
-        return logCopy;
+        return Collections.unmodifiableList(this.currentLogs);
     }
 
     public long getLogCount() {
