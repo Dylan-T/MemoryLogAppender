@@ -1,52 +1,40 @@
 package nz.ac.vuw.swen301.assignment2;
 
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
 import org.apache.log4j.Layout;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.helpers.PatternConverter;
-import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
-import freemarker.template.*;
-import java.io.*;
-import java.util.*;
-import freemarker.log.Logger;
-import org.apache.log4j.BasicConfigurator;
+
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Variables that must be supported are:
- * c (category)
+ * c (category) -> categoryName -> logger.toString() ????
  * d (using the default toString() representation or any fixed dataformat is acceptable)
  * m (message)
- * p (priority)
+ * p (priority) -> level.toString()
  */
 public class T1Layout extends Layout {
     public static final String DEFAULT_PATTERN = "${m}";
-    private String pattern;
-    private Template temp;
+    private DateFormat date = new SimpleDateFormat();
+    private Configuration cfg;
 
     public T1Layout(String pattern){
-        /* ------------------------------------------------------------------------ */
-        /* You should do this ONLY ONCE in the whole application life-cycle:        */
-
-        /* Create and adjust the configuration singleton */
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setLogTemplateExceptions(false);
-        cfg.setWrapUncheckedExceptions(true);
-
         if(pattern == null){
-            pattern = DEFAULT_PATTERN;
-        }
-        this.pattern = pattern;
-
-
-        /* Get the template */
-        try {
-            this.temp = new Template("pattern", new StringReader(this.pattern), cfg);
-        } catch (Exception e){
-
+            return;
         }
 
+        cfg = new Configuration(Configuration.VERSION_2_3_27);
+
+
+        StringTemplateLoader sLoader = new StringTemplateLoader();
+        sLoader.putTemplate("pattern", pattern);
+        cfg.setTemplateLoader(sLoader);
     }
 
     public void activateOptions() {
@@ -59,9 +47,14 @@ public class T1Layout extends Layout {
 
     public String format(LoggingEvent event) {
         try {
-            /* Merge data-model with template */
             Writer out = new StringWriter();
-            temp.process(event, out);
+
+            Map<String, Object> vars = new HashMap<String, Object>();
+            vars.put("c", event.getLoggerName());
+            vars.put("d", date.format(event.getTimeStamp()));
+            vars.put("m", event.getMessage());
+            vars.put("p", event.getLevel().toString());
+            cfg.getTemplate("pattern").process(vars, out);
             String s = out.toString();
             out.close();
             return s;
