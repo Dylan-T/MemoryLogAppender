@@ -48,7 +48,6 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      * @return list containing the current logs, must not be modifiable
      */
     public List<String> getCurrentLogs() {
-        ArrayList logCopy = new ArrayList(currentLogs); //Copy to make unmodifiable
         return Collections.unmodifiableList(this.currentLogs);
     }
 
@@ -74,9 +73,9 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
     }
 
     public void close() {
-        currentLogs.clear();
-        discardedLogs = 0;
-        layout = null;
+//        currentLogs.clear();
+//        discardedLogs = 0;
+//        layout = null;
     }
 
     public boolean requiresLayout() {
