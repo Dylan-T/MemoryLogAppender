@@ -29,7 +29,7 @@ public class T1Layout extends Layout {
             return;
         }
 
-        cfg = new Configuration(Configuration.VERSION_2_3_27);
+        cfg = new Configuration(Configuration.VERSION_2_3_28);
 
 
         StringTemplateLoader sLoader = new StringTemplateLoader();

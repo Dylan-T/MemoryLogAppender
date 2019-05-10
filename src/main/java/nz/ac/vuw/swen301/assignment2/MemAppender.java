@@ -1,26 +1,20 @@
 package nz.ac.vuw.swen301.assignment2;
 
-import org.apache.log4j.*;
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * a. MemAppender stores all log entries converted to strings using a layout in a list (they are not printed to the console!)
- *
- * b. logs can be accessed using the following non-static method:
- *    java.util.List<String> getCurrentLogs()
  *
  * c. the list returned by getCurrentLogs() must not be modifiable
  *
- * d. MemAppender has a property maxSize, if the number of logs reaches maxSize, the oldest logs are discarded.
- *    The number of discarded logs is counted, and this count can be accessed using the getDiscardedLogCount() method in MemAppender that returns this count as a long.
  */
 public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
@@ -73,9 +67,6 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
     }
 
     public void close() {
-//        currentLogs.clear();
-//        discardedLogs = 0;
-//        layout = null;
     }
 
     public boolean requiresLayout() {
