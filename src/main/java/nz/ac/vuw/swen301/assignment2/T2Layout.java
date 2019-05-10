@@ -48,27 +48,13 @@ public class T2Layout extends Layout {
             template = new Template();
             template.setRuntimeServices(rs);
             template.setData(sn);
-            template.initDocument();
 
             StringWriter sw = new StringWriter();
 
             template.merge( context, sw );
+        }catch( Exception e ) {
+
         }
-        catch( ResourceNotFoundException rnfe )
-        {
-            // couldn't find the template
-        }
-        catch( ParseErrorException pee )
-        {
-            // syntax error: problem parsing the template
-        }
-        catch( MethodInvocationException mie )
-        {
-            // something invoked in the template
-            // threw an exception
-        }
-        catch( Exception e )
-        {}
 
 
     }
