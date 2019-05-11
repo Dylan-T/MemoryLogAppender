@@ -5,9 +5,6 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
@@ -18,47 +15,25 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Variables that must be supported are:
- * c (category)
- * d (using the default toString() representation or any fixed dataformat is acceptable)
- * m (message)
- * p (priority)
+ * This is a layout that uses the velocity template engine
  */
 public class T2Layout extends Layout {
 
-    VelocityContext context;
-    Template template;
+    private VelocityContext context;
+    private Template template;
     private DateFormat date = new SimpleDateFormat();
 
+    /**
+     * Creates a layout that formats events according to the pattern
+     * @param pattern
+     */
     public T2Layout(String pattern){
-
-
         Velocity.init();
-
         context = new VelocityContext();
-
-        context.put("name", "Velocity");
-
-        try
-        {
-            RuntimeServices rs = RuntimeSingleton.getRuntimeServices();
-            StringReader sr = new StringReader(pattern);
-            SimpleNode sn = rs.parse(sr, "User Information");
-
-            template = new Template();
-            template.setRuntimeServices(rs);
-            template.setData(sn);
-
-            StringWriter sw = new StringWriter();
-
-            template.merge( context, sw );
-        }catch( Exception e ) {
-
-        }
-
-
+        setPattern(pattern);
     }
 
+    @Override
     public String format(LoggingEvent event) {
         context.put("c", event.getLoggerName());
         context.put("d", date.format(event.getTimeStamp()));
@@ -70,11 +45,32 @@ public class T2Layout extends Layout {
         return sw.toString();
     }
 
+    /**
+     * Sets the layouts pattern that it formats events into
+     * @param pattern
+     */
+    public void setPattern(String pattern){
+        try
+        {
+            RuntimeServices rs = RuntimeSingleton.getRuntimeServices();
+            StringReader sr = new StringReader(pattern);
+            SimpleNode sn = rs.parse(sr, "User Information");
+
+            template = new Template();
+            template.setRuntimeServices(rs);
+            template.setData(sn);
+            template.initDocument();
+
+        }catch( Exception e ) {
+            //Something went wrong
+        }
+    }
+
+    @Override
     public boolean ignoresThrowable() {
-        return false;
+        return true;
     }
 
-    public void activateOptions() {
 
-    }
+    public void activateOptions() { }
 }

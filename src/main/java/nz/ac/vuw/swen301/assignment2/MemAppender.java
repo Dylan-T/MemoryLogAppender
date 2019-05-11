@@ -12,9 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
- * c. the list returned by getCurrentLogs() must not be modifiable
- *
+ * An appender that appends logs to the systems memory
  */
 public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
@@ -27,36 +25,58 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      * Construct a new MemAppender object
      */
     public MemAppender(Layout layout, long maxSize) {
-        //Adds this to the MBean server
         this.layout = layout;
         this.maxSize = maxSize;
+        //Adds this to the MBean server
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         try {
             mbs.registerMBean(this, new ObjectName("nz.ac.vuw.swen301.assignment2:type=MemAppender:"));
         } catch(Exception e){
-
+            //MBean fail
         }
     }
+
     /**
-     *
+     * Returns the logs currently stored
      * @return list containing the current logs, must not be modifiable
      */
     public List<String> getCurrentLogs() {
         return Collections.unmodifiableList(this.currentLogs);
     }
 
+    /**
+     * Returns the 10 most recent logs stored
+     * @return
+     */
+    public List<String> getTopLogs() {
+        int numLogs = 10;
+        if(getCurrentLogs().size() < 10){
+            numLogs = getCurrentLogs().size();
+        }
+        List<String> topLogs = new ArrayList<String>();
+        for(int i = 0; i < numLogs; i++){
+            topLogs.add(currentLogs.get(currentLogs.size()-1-i));
+        }
+        return topLogs;
+    }
+
+    /**
+     * Returns the number of logs that are currently stored
+     * @return
+     */
     public long getLogCount() {
         return currentLogs.size();
     }
 
     /**
-     *
+     * Returns the amount of discarded logs
      * @return the amount of logs that have been discarded
      */
     public long getDiscardedLogCount(){
         return discardedLogs;
     }
 
+    @Override
     protected void append(LoggingEvent loggingEvent) {
         if (layout == null) return;
         if(currentLogs.size() == maxSize){
@@ -66,9 +86,18 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
         currentLogs.add(layout.format(loggingEvent));
     }
 
+    /**
+     * resets the appender's memory and fields
+     */
     public void close() {
+        currentLogs.clear();
+        discardedLogs = 0;
     }
 
+    /**
+     * Returns whether this appender requires a layout
+     * @return
+     */
     public boolean requiresLayout() {
         return true;
     }

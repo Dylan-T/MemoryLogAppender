@@ -13,38 +13,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Variables that must be supported are:
- * c (category) -> categoryName -> logger.toString() ????
- * d (using the default toString() representation or any fixed dataformat is acceptable)
- * m (message)
- * p (priority) -> level.toString()
+ * This a layout class that uses the freemarker template engine.
  */
 public class T1Layout extends Layout {
-    public static final String DEFAULT_PATTERN = "${m}";
     private DateFormat date = new SimpleDateFormat();
     private Configuration cfg;
 
+    /**
+     * Create a layout that formats events using the pattern
+     * @param pattern
+     */
     public T1Layout(String pattern){
-        if(pattern == null){
-            return;
-        }
-
         cfg = new Configuration(Configuration.VERSION_2_3_28);
+        setPattern(pattern);
+    }
 
+    public void activateOptions() {
+        //PATTERN LAYOUT DIDNT IMPLEMENT THIS SO NEITHER HAVE I
+    }
 
+    @Override
+    public boolean ignoresThrowable() {
+        return true;
+    }
+
+    /**
+     * Sets the pattern for events to be formatted with
+     * @param pattern
+     */
+    public void setPattern(String pattern){
         StringTemplateLoader sLoader = new StringTemplateLoader();
         sLoader.putTemplate("pattern", pattern);
         cfg.setTemplateLoader(sLoader);
     }
 
-    public void activateOptions() {
-    }
-
-    public boolean ignoresThrowable() {
-        return true;
-    }
-
-
+    @Override
     public String format(LoggingEvent event) {
         try {
             Writer out = new StringWriter();
@@ -59,7 +62,7 @@ public class T1Layout extends Layout {
             out.close();
             return s;
         }catch (Exception e){
-            return null;
+            return "";
         }
     }
 }

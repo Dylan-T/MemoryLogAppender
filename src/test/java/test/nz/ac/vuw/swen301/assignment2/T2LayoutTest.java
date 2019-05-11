@@ -11,15 +11,6 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class T2LayoutTest {
-    @Before
-    public void TestSetup(){
-
-    }
-
-    @After
-    public void TestCleanup(){
-
-    }
 
     @Test
     public void testVarM(){
@@ -43,7 +34,7 @@ public class T2LayoutTest {
 
     @Test
     public void testVarP(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("test1");
         Layout layout = new T2Layout("$p");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -53,11 +44,30 @@ public class T2LayoutTest {
 
     @Test
     public void testVarD(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("test1");
         Layout layout = new T2Layout("$d");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
         logger.error("Message");
         assertEquals(new SimpleDateFormat().format(new Date().getTime()), memAppender.getCurrentLogs().get(0));
+    }
+
+    @Test
+    public void testIgnoresThrowables(){
+        Layout layout = new T2Layout("$d");
+        assert(layout.ignoresThrowable());
+    }
+
+    @Test
+    public void testSetPattern(){
+        Logger logger = Logger.getLogger("test1");
+        T2Layout layout = new T2Layout("$m");
+        MemAppender memAppender = new MemAppender(layout, 1000);
+        logger.addAppender(memAppender);
+        logger.error("Message");
+        assertEquals("Message", memAppender.getCurrentLogs().get(0));
+        layout.setPattern("${p}");
+        logger.error("Message");
+        assertEquals("ERROR", memAppender.getCurrentLogs().get(1));
     }
 }

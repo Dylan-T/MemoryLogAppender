@@ -1,22 +1,31 @@
 #SWEN 301 Assignment 2
 
 ##a)
-Any special Instructions to run the tests (if needed)
+To run all the tests type "mvn clean test" or run them through an IDE
 
-##b)
-A reflection on the test coverage reports (in particular, an explanation why certain parts of the code are not covered). Insert a summary of the reports (e.g., embed a screenshot)
+##b) Test Coverage
 
-##c)
+Test Coverage:
+
+|Class|Method|Line|
+|---|---|---|
+|MemAppender|100% (8/8)|93% (28/30)|
+|T1Layout|80% (4/5)|86% (20/23)|
+|T2Layout|80% (4/5)|92% (23/25) |
+
+My tests have almost complete coverage with only some part missed. The missed methods in T1Layout & T2Layout is activateOptions(), I have missed testing this method because it is an empty method.
+This method was left empty because it is not required and the PatternLayout also left it empty.
+The other missed lines in my code is mostly the catch blocks in my code. These are being missed because the catch blocks cannot be reached.
+
+##c T1Layout (FreeMarker) vs T2Layout (Velocity)
 An evaluation which of the layouts, T1Layout or T2Layout, you recommend for use. Base your decision on your experience (ease of use), technical aspects (e.g. performance as shown in the stress tests, stability, number and size of direct and indirect dependencies), and social aspects (size and activity of developer community, license, support like mailing lists and stackoverflow topics, usage by others, … ) 
 
-##d)
-The README should be brief, at least 300 but not more than 800 words
+Performance of stress tests:
+T1 Total logs: 33763162
+T2 Total logs: 51675322
 
+Ease of use:
+T2layout is easier to use as the patterns variables can be written as $variable whereas T1Layout requires them to be written as ${variable}.
 
-##Penalties
- - violations of naming rules 
- - violating the Maven standard project layout 
- - use of absolute references (e.g., libraries should not be referenced using absolute paths like “C:\\Users\\..”, instead use relative references w.r.t. the project root folder)
- - references to local libraries (libraries should be referenced via the Maven repository)
- - use of libraries not on the whitelist (unless they are only used via transitive dependencies)
- - not using git for development (only using a very few large commits)
+Conclusion:
+Overall I would recommend T2Layout. I would recommend it because it performs better, it is easier to use and the velocity template engine appears to be more commonly used and have more support.

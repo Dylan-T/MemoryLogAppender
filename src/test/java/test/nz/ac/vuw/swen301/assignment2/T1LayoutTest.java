@@ -63,4 +63,25 @@ public class T1LayoutTest {
         logger.error("Message");
         assertEquals(new SimpleDateFormat().format(new Date().getTime()), memAppender.getCurrentLogs().get(0));
     }
+
+
+    @Test
+    public void testIgnoresThrowables(){
+        Layout layout = new T1Layout("${d}");
+        assert(layout.ignoresThrowable());
+    }
+
+    @Test
+    public void testSetPattern(){
+        Logger logger = Logger.getLogger("test1");
+        T1Layout layout = new T1Layout("${m}");
+        MemAppender memAppender = new MemAppender(layout, 1000);
+        logger.addAppender(memAppender);
+        logger.error("Message");
+        assertEquals("Message", memAppender.getCurrentLogs().get(0));
+        layout.setPattern("${p}");
+        logger.error("Message");
+        assertEquals("ERROR", memAppender.getCurrentLogs().get(1));
+    }
+
 }
