@@ -1,9 +1,9 @@
-#SWEN 301 Assignment 2
+# SWEN 301 Assignment 2
 
-##a)
+## a) Running Tests
 To run all the tests type "mvn clean test" or run them through an IDE
 
-##b) Test Coverage
+## b) Test Coverage
 
 Test Coverage:
 
