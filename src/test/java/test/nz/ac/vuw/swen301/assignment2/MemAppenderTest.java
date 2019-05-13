@@ -89,7 +89,7 @@ public class MemAppenderTest {
         for(int i = 0; i <20; i++){
             logger.error("" + i);
         }
-        assertEquals(10, memAppender.getTopLogs().size());
+        assertEquals(10, memAppender.getTopLogs().length);
         for(int i = 10; i < 20; i++) {
             assert (!memAppender.getCurrentLogs().contains("" + i));
         }

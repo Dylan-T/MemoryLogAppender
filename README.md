@@ -1,10 +1,9 @@
 # SWEN 301 Assignment 2
 
-## a) How to run tests
+## a) Running Tests
 To run all the tests type "mvn clean test" or run them through an IDE
 
 ## b) Test Coverage
-
 Test Coverage:
 
 |Class|Method|Line|
