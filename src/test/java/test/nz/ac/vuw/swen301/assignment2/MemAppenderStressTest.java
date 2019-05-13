@@ -13,10 +13,10 @@ public class MemAppenderStressTest {
 
     @Test
     public void test1Min(){
-        //Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("Stress1");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
-        //logger.addAppender(memAppender);
+
 
         //MBEAN
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -31,7 +31,7 @@ public class MemAppenderStressTest {
         //Pre create event
         Date now=new Date();
         String msg="debug message";
-        LoggingEvent event = new LoggingEvent("test",null,now.getTime(),Level.DEBUG,msg,Thread.currentThread().getName(),null,null,null,null);
+        LoggingEvent event = new LoggingEvent("test",logger,now.getTime(),Level.DEBUG,msg,Thread.currentThread().getName(),null,null,null,null);
 
 
 
@@ -41,7 +41,7 @@ public class MemAppenderStressTest {
             memAppender.doAppend(event);
         }
         System.out.println("==========\n" +
-                "Stress test\n" +
+                "MemAppender Stress test\n" +
                 "===========\n" +
                 "Total logs: " + (memAppender.getCurrentLogs().size() + memAppender.getDiscardedLogCount()));
     }

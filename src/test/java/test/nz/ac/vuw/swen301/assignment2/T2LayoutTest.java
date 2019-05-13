@@ -14,7 +14,7 @@ public class T2LayoutTest {
 
     @Test
     public void testVarM(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T2test1");
         Layout layout = new T2Layout("$m");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -24,17 +24,17 @@ public class T2LayoutTest {
 
     @Test
     public void testVarC(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("T2test2");
         Layout layout = new T2Layout("$c");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
         logger.error("Message");
-        assertEquals("category", memAppender.getCurrentLogs().get(0));
+        assertEquals("T2test2", memAppender.getCurrentLogs().get(0));
     }
 
     @Test
     public void testVarP(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T2test3");
         Layout layout = new T2Layout("$p");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -44,7 +44,7 @@ public class T2LayoutTest {
 
     @Test
     public void testVarD(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T2test4");
         Layout layout = new T2Layout("$d");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -60,7 +60,7 @@ public class T2LayoutTest {
 
     @Test
     public void testSetPattern(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T2test5");
         T2Layout layout = new T2Layout("$m");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -69,5 +69,15 @@ public class T2LayoutTest {
         layout.setPattern("${p}");
         logger.error("Message");
         assertEquals("ERROR", memAppender.getCurrentLogs().get(1));
+    }
+
+    @Test
+    public void testDefaultPattern(){
+        Logger logger = Logger.getLogger("T1test6");
+        Layout layout = new T2Layout();
+        MemAppender memAppender = new MemAppender(layout, 1000);
+        logger.addAppender(memAppender);
+        logger.error("Message");
+        assertEquals("Message", memAppender.getCurrentLogs().get(0));
     }
 }

@@ -33,6 +33,15 @@ public class T2Layout extends Layout {
         setPattern(pattern);
     }
 
+    /**
+     * Creates a layout using the default pattern
+     */
+    public T2Layout(){
+        Velocity.init();
+        context = new VelocityContext();
+        setPattern("$m");
+    }
+
     @Override
     public String format(LoggingEvent event) {
         context.put("c", event.getLoggerName());

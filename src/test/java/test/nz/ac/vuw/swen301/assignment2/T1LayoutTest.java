@@ -14,19 +14,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class T1LayoutTest {
-    @Before
-    public void TestSetup(){
 
-    }
-
-    @After
-    public void TestCleanup(){
-
-    }
 
     @Test
     public void testVarM(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T1test1");
         Layout layout = new T1Layout("${m}");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -36,17 +28,17 @@ public class T1LayoutTest {
 
     @Test
     public void testVarC(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("T1test2");
         Layout layout = new T1Layout("${c}");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
         logger.error("Message");
-        assertEquals("category", memAppender.getCurrentLogs().get(0));
+        assertEquals("T1test2", memAppender.getCurrentLogs().get(0));
     }
 
     @Test
     public void testVarP(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("T1test3");
         Layout layout = new T1Layout("${p}");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -56,7 +48,7 @@ public class T1LayoutTest {
 
     @Test
     public void testVarD(){
-        Logger logger = Logger.getLogger("category");
+        Logger logger = Logger.getLogger("T1test4");
         Layout layout = new T1Layout("${d}");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -73,7 +65,7 @@ public class T1LayoutTest {
 
     @Test
     public void testSetPattern(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("T1test5");
         T1Layout layout = new T1Layout("${m}");
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -82,6 +74,16 @@ public class T1LayoutTest {
         layout.setPattern("${p}");
         logger.error("Message");
         assertEquals("ERROR", memAppender.getCurrentLogs().get(1));
+    }
+
+    @Test
+    public void testDefaultPattern(){
+        Logger logger = Logger.getLogger("T1test6");
+        Layout layout = new T1Layout();
+        MemAppender memAppender = new MemAppender(layout, 1000);
+        logger.addAppender(memAppender);
+        logger.error("Message");
+        assertEquals("Message", memAppender.getCurrentLogs().get(0));
     }
 
 }

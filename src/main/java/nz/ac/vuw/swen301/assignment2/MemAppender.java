@@ -18,7 +18,7 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
     private final long maxSize;
     private long discardedLogs = 0;
-    private List<String> currentLogs = new ArrayList<String>();
+    private List<String> currentLogs;
     private Layout layout;
 
     /**
@@ -28,6 +28,7 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
         if(layout == null){
             throw new IllegalArgumentException();
         }
+        currentLogs = new ArrayList<String>();
         this.layout = layout;
         this.maxSize = maxSize;
     }
@@ -45,10 +46,13 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      * @return
      */
     public String[] getTopLogs() {
+        //Check if <10 logs stored
         int numLogs = 10;
         if(getCurrentLogs().size() < 10){
             numLogs = getCurrentLogs().size();
         }
+
+        //Add 10 most recent to array
         String[] topLogs = new String[10];
         for(int i = 0; i < numLogs; i++){
             topLogs[i] = currentLogs.get(currentLogs.size()-1-i);

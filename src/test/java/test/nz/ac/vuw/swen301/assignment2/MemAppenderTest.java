@@ -21,7 +21,7 @@ public class MemAppenderTest {
 
     @Test
     public void testAppend2(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test2");
         Layout layout = new SimpleLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -31,8 +31,8 @@ public class MemAppenderTest {
 
     @Test
     public void testMaxSize(){
-        Logger logger = Logger.getLogger("test1");
-        Layout layout = new PatternLayout("%m");
+        Logger logger = Logger.getLogger("test3");
+        Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 10);
         logger.addAppender(memAppender);
         for(int i = 0; i < 11; i++){
@@ -45,7 +45,7 @@ public class MemAppenderTest {
 
     @Test
     public void testClose(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test4");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -58,7 +58,7 @@ public class MemAppenderTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testUnmodifiableList(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test5");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -82,7 +82,7 @@ public class MemAppenderTest {
 
     @Test
     public void testTop10Logs(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test6");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -98,7 +98,7 @@ public class MemAppenderTest {
 
     @Test
     public void testERROR(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test7");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -108,7 +108,7 @@ public class MemAppenderTest {
 
     @Test
     public void testDEBUG(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test8");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -118,7 +118,7 @@ public class MemAppenderTest {
 
     @Test
     public void testINFO(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test9");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -128,7 +128,7 @@ public class MemAppenderTest {
 
     @Test
     public void testWARN(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test10");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -138,7 +138,7 @@ public class MemAppenderTest {
 
     @Test
     public void testFATAL(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test11");
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);
         logger.addAppender(memAppender);
@@ -148,7 +148,7 @@ public class MemAppenderTest {
 
     @Test
     public void testTrace(){
-        Logger logger = Logger.getLogger("test1");
+        Logger logger = Logger.getLogger("test12");
         logger.setLevel(Level.TRACE);
         Layout layout = new PatternLayout();
         MemAppender memAppender = new MemAppender(layout, 1000);

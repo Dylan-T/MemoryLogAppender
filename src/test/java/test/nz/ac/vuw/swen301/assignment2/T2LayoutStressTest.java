@@ -15,11 +15,12 @@ public class T2LayoutStressTest {
     public void test1Min(){
         long numFormatted = 0;
         Layout layout = new T2Layout("${p} - ${c} - ${d} - ${m}");
+        Logger logger = Logger.getLogger("Stress3");
 
         //Pre create event
         Date now=new Date();
         String msg="debug message";
-        LoggingEvent event = new LoggingEvent("test",null,now.getTime(), Level.DEBUG,msg,Thread.currentThread().getName(),null,null,null,null);
+        LoggingEvent event = new LoggingEvent("test",logger,now.getTime(), Level.DEBUG,msg,Thread.currentThread().getName(),null,null,null,null);
 
         final long NANOSEC_PER_SEC = 1000l*1000*1000;
         long startTime = System.nanoTime();
@@ -29,7 +30,7 @@ public class T2LayoutStressTest {
         }
 
         System.out.println("==========\n" +
-                "Stress test\n" +
+                "T2Layout Stress test\n" +
                 "===========\n" +
                 "Total logs: " + numFormatted);
     }
