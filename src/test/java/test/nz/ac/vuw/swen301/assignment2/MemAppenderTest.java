@@ -68,14 +68,16 @@ public class MemAppenderTest {
         assertEquals(1, logs.size());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testRequiresLayout(){
-        Logger logger = Logger.getLogger("test1");
         MemAppender memAppender = new MemAppender(null, 1000);
-        logger.addAppender(memAppender);
-        logger.error("Message");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void changeLayoutNull(){
+        MemAppender memAppender = new MemAppender(new PatternLayout(), 1000);
         assert(memAppender.requiresLayout());
-        assert(memAppender.getCurrentLogs().size() == 0);
+        memAppender.setLayout(null);
     }
 
     @Test
@@ -92,6 +94,7 @@ public class MemAppenderTest {
             assert (!memAppender.getCurrentLogs().contains("" + i));
         }
     }
+
 
     @Test
     public void testERROR(){

@@ -25,15 +25,11 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      * Construct a new MemAppender object
      */
     public MemAppender(Layout layout, long maxSize) {
+        if(layout == null){
+            throw new IllegalArgumentException();
+        }
         this.layout = layout;
         this.maxSize = maxSize;
-        //Adds this to the MBean server
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        try {
-            mbs.registerMBean(this, new ObjectName("nz.ac.vuw.swen301.assignment2:type=MemAppender:"));
-        } catch(Exception e){
-            //MBean fail
-        }
     }
 
     /**
@@ -48,14 +44,14 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      * Returns the 10 most recent logs stored
      * @return
      */
-    public List<String> getTopLogs() {
+    public String[] getTopLogs() {
         int numLogs = 10;
         if(getCurrentLogs().size() < 10){
             numLogs = getCurrentLogs().size();
         }
-        List<String> topLogs = new ArrayList<String>();
+        String[] topLogs = new String[10];
         for(int i = 0; i < numLogs; i++){
-            topLogs.add(currentLogs.get(currentLogs.size()-1-i));
+            topLogs[i] = currentLogs.get(currentLogs.size()-1-i);
         }
         return topLogs;
     }
@@ -78,7 +74,6 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
 
     @Override
     protected void append(LoggingEvent loggingEvent) {
-        if (layout == null) return;
         if(currentLogs.size() == maxSize){
             currentLogs.remove(0);
             discardedLogs++;
@@ -92,6 +87,7 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
     public void close() {
         currentLogs.clear();
         discardedLogs = 0;
+        this.closed = true;
     }
 
     /**
@@ -100,5 +96,13 @@ public class MemAppender extends AppenderSkeleton implements MemAppenderMBean {
      */
     public boolean requiresLayout() {
         return true;
+    }
+
+    @Override
+    public void setLayout(Layout layout){
+        if(layout == null){
+            throw new IllegalArgumentException();
+        }
+        this.layout = layout;
     }
 }
